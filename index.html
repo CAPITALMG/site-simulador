@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Calcule quanto você economiza quitando o financiamento antecipadamente. Cálculo pela metodologia do MPSC — desconto proporcional dos juros (art. 52, §2º do CDC).">
+<meta name="theme-color" content="#0E7C56">
+<meta property="og:title" content="Simulador de Quitação Antecipada — CG Colombo Assessoria">
+<meta property="og:description" content="Quanto o cliente economiza quitando o financiamento hoje.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%A7%AE%3C/text%3E%3C/svg%3E">
+<title>Simulador de Quitação Antecipada — CG Colombo Assessoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F5F7F5; --surface:#FFFFFF; --ink:#1C2B26; --muted:#5A6B63;
+    --line:#DFE6E1; --line-soft:#EBF0EC;
+    --accent:#0E7C56; --accent-press:#0A5C40; --accent-soft:#E3F1EA; --on-accent:#FFFFFF;
+    --c-quit:#B45309; --c-econ:#0E7C56;
+    --warn-bg:#FDF3E3; --warn-ink:#8A5A10;
+    --shadow:0 1px 2px rgba(28,43,38,.06),0 4px 16px rgba(28,43,38,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#101513; --surface:#1A211E; --ink:#E8EDEA; --muted:#93A39B;
+      --line:#2A342F; --line-soft:#232C28;
+      --accent:#18956B; --accent-press:#21AB7D; --accent-soft:#1E3229; --on-accent:#FFFFFF;
+      --c-quit:#D97706; --c-econ:#0D9488;
+      --warn-bg:#33290F; --warn-ink:#E0B457;
+      --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 16px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#101513; --surface:#1A211E; --ink:#E8EDEA; --muted:#93A39B;
+    --line:#2A342F; --line-soft:#232C28;
+    --accent:#18956B; --accent-press:#21AB7D; --accent-soft:#1E3229; --on-accent:#FFFFFF;
+    --c-quit:#D97706; --c-econ:#0D9488;
+    --warn-bg:#33290F; --warn-ink:#E0B457;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 16px rgba(0,0,0,.3);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+    font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:24px 20px 64px}
+
+  /* marca */
+  .brand{display:flex; align-items:center; gap:14px; padding:8px 0 22px}
+  .brand__logo{
+    width:46px;height:46px;border-radius:12px;flex:none;
+    background:var(--accent); color:var(--on-accent);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:19px;letter-spacing:.5px;
+    overflow:hidden;
+  }
+  .brand__logo img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+  .brand__nome{font-weight:600;font-size:17px;letter-spacing:.2px}
+  .brand__sub{font-size:13px;color:var(--muted)}
+
+  h1{
+    font-family:'Bricolage Grotesque','IBM Plex Sans',sans-serif;
+    font-weight:700; font-size:clamp(28px,5vw,40px); line-height:1.12;
+    margin:0 0 6px; text-wrap:balance;
+  }
+  .lede{color:var(--muted); max-width:56ch; margin:0 0 28px; font-size:16.5px}
+
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:26px; margin-bottom:22px;
+  }
+  .card h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 18px;
+  }
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 20px}
+  @media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  .field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+  .field .hint{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:2px}
+  .field input{
+    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;
+    background:var(--bg);color:var(--ink);font:inherit;font-variant-numeric:tabular-nums;
+  }
+  .field input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .field input.erro{border-color:#C2410C}
+  .acao{display:flex;gap:12px;align-items:center;margin-top:22px;flex-wrap:wrap}
+  button{
+    font:inherit;font-weight:600;border:none;border-radius:10px;cursor:pointer;
+    padding:12px 22px;transition:background .15s;
+  }
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .bt-primario{background:var(--accent);color:var(--on-accent);font-size:16.5px}
+  .bt-primario:hover{background:var(--accent-press)}
+  .bt-leve{background:var(--accent-soft);color:var(--accent);padding:10px 16px;font-size:14.5px}
+  .bt-leve:hover{filter:brightness(.96)}
+  .msg-erro{color:#C2410C;font-size:14px;font-weight:500;display:none}
+
+  /* resultado */
+  #resultado{display:none}
+  .hero{
+    text-align:left;padding:6px 0 2px;
+  }
+  .hero .rotulo{font-size:13.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  .hero .valor{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:clamp(34px,6vw,48px);line-height:1.05;color:var(--accent);
+    font-variant-numeric:tabular-nums;margin:4px 0 2px;
+  }
+  .hero .sub{color:var(--muted);font-size:15px}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 20px}
+  @media(max-width:600px){.tiles{grid-template-columns:1fr}}
+  .tile{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg)}
+  .tile .t{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  .tile .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:3px}
+
+  .barra{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px;background:var(--surface)}
+  .barra>div{min-width:14px}
+  .seg-quit{background:var(--c-quit)}
+  .seg-econ{background:var(--c-econ)}
+  .legenda{display:flex;gap:22px;margin-top:10px;flex-wrap:wrap;font-size:14px}
+  .legenda .chip{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+  .legenda b{font-variant-numeric:tabular-nums}
+
+  .aviso{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:10px 14px;font-size:14px;margin-top:16px;display:none}
+
+  details{margin-top:20px;border-top:1px solid var(--line-soft);padding-top:14px}
+  summary{cursor:pointer;font-weight:600;font-size:15px;color:var(--accent)}
+  .tabela-scroll{overflow-x:auto;margin-top:12px}
+  table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+  th{text-align:left;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;padding:7px 14px 7px 0;border-bottom:1px solid var(--line)}
+  td{padding:6px 14px 6px 0;border-bottom:1px solid var(--line-soft)}
+  td.num,th.num{text-align:right}
+
+  .rodape{color:var(--muted);font-size:13px;max-width:70ch;margin-top:26px}
+  .rodape a{color:var(--accent)}
+
+  @media print{
+    .acao,.bt-leve,.rodape a{display:none!important}
+    .card{box-shadow:none;border-color:#bbb}
+    body{background:#fff}
+    details{display:block}
+  }
+</style>
+
+<div class="wrap">
+  <header class="brand" id="marca">
+    <div class="brand__logo" id="marcaLogo">CG</div>
+    <div>
+      <div class="brand__nome" id="marcaNome">CG Colombo Assessoria</div>
+      <div class="brand__sub">Simulação de crédito</div>
+    </div>
+  </header>
+
+  <h1>Simulador de Quitação Antecipada</h1>
+  <p class="lede">Quanto o cliente economiza quitando o financiamento hoje. Mesma metodologia da
+  calculadora pública do MPSC: desconto proporcional dos juros, direito garantido pelo
+  art.&nbsp;52, §&nbsp;2º do Código de Defesa do Consumidor.</p>
+
+  <section class="card">
+    <h2>Dados do contrato</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="fValor">Valor da parcela
+          <span class="hint">valor nominal, ex.: 500,00</span></label>
+        <input id="fValor" inputmode="decimal" placeholder="500,00" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="fTaxa">Taxa de juros ao mês (%)
+          <span class="hint">a taxa do contrato, ex.: 1,80</span></label>
+        <input id="fTaxa" inputmode="decimal" placeholder="1,80" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="fParcelas">Parcelas que faltam
+          <span class="hint">quantas ainda serão pagas</span></label>
+        <input id="fParcelas" inputmode="numeric" placeholder="84" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="fDiaVenc">Dia do vencimento
+          <span class="hint">dia do mês, ex.: 10</span></label>
+        <input id="fDiaVenc" inputmode="numeric" placeholder="10" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="fQuit">Data da quitação
+          <span class="hint">quando o cliente quer quitar</span></label>
+        <input id="fQuit" type="date">
+      </div>
+      <div class="field">
+        <label for="fAssin">Assinatura do contrato
+          <span class="hint">opcional — vale p/ contratos após 05/05/2014</span></label>
+        <input id="fAssin" type="date">
+      </div>
+    </div>
+    <div class="acao">
+      <button class="bt-primario" id="btCalc">Calcular economia</button>
+      <span class="msg-erro" id="msgErro"></span>
+    </div>
+    <div class="aviso" id="avisoAssin">⚠ Contrato assinado antes de 05/05/2014 — a metodologia
+    (Resolução CMN) vale para contratos a partir dessa data. Use o resultado só como referência.</div>
+  </section>
+
+  <section class="card" id="resultado" aria-live="polite">
+    <div class="hero">
+      <div class="rotulo">Economia do cliente</div>
+      <div class="valor" id="rEconomia">—</div>
+      <div class="sub" id="rEconomiaPct">—</div>
+    </div>
+
+    <div class="tiles">
+      <div class="tile"><div class="t">Valor para quitar</div><div class="v" id="rQuitacao">—</div></div>
+      <div class="tile"><div class="t">Total sem desconto</div><div class="v" id="rNominal">—</div></div>
+      <div class="tile"><div class="t">Parcelas descontadas</div><div class="v" id="rNParc">—</div></div>
+    </div>
+
+    <div class="barra" role="img" aria-label="Proporção entre valor de quitação e economia">
+      <div class="seg-quit" id="segQuit"></div>
+      <div class="seg-econ" id="segEcon"></div>
+    </div>
+    <div class="legenda">
+      <span><span class="chip seg-quit"></span>Paga hoje <b id="lgQuit">—</b></span>
+      <span><span class="chip seg-econ"></span>Deixa de pagar <b id="lgEcon">—</b></span>
+    </div>
+
+    <div class="acao">
+      <button class="bt-leve" id="btCopiar">Copiar resumo p/ WhatsApp</button>
+      <button class="bt-leve" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+
+    <details>
+      <summary>Ver parcela a parcela</summary>
+      <div class="tabela-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Vencimento</th><th class="num">Valor nominal</th><th class="num">Valor com desconto</th><th class="num">Acumulado</th></tr></thead>
+          <tbody id="tbodyParcelas"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <p class="rodape">Resultado informativo — confirme o valor exato com o boleto de quitação da
+  instituição. Metodologia: valor presente de cada parcela pela taxa contratual
+  (art.&nbsp;52, §&nbsp;2º do CDC; art.&nbsp;7º da Resolução CMN n.&nbsp;5.004/2022), conforme a
+  calculadora pública do Ministério Público de Santa Catarina.</p>
+</div>
+
+<script>
+/* ===== MARCA — edite aqui: nome da empresa e logo (data URI ou deixe vazio p/ iniciais) ===== */
+const MARCA = { nome: 'CG Colombo Assessoria', iniciais: 'CG', logoDataURI: '' };
+(function(){
+  document.getElementById('marcaNome').textContent = MARCA.nome;
+  const alvo = document.getElementById('marcaLogo');
+  if (MARCA.logoDataURI){ alvo.innerHTML = '<img alt="Logo '+MARCA.nome+'" src="'+MARCA.logoDataURI+'">'; }
+  else { alvo.textContent = MARCA.iniciais; }
+})();
+
+/* ===== Cálculo — validado contra a calculadora do MPSC (idêntico parcela a parcela) ===== */
+const brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const fmtData = d => String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
+
+function parseNum(s){
+  s = (s||'').trim().replace(/\./g,'').replace(',','.');
+  const v = parseFloat(s);
+  return isFinite(v) ? v : NaN;
+}
+function dataUTC(iso){ // 'AAAA-MM-DD' -> Date UTC
+  if(!iso) return null;
+  const [a,m,d] = iso.split('-').map(Number);
+  return new Date(Date.UTC(a, m-1, d));
+}
+function vencimento(ano, mes, dia){ // clampa dia 29-31 em mês curto
+  const ultimo = new Date(Date.UTC(ano, mes+1, 0)).getUTCDate();
+  return new Date(Date.UTC(ano, mes, Math.min(dia, ultimo)));
+}
+function calcular(P, taxaPct, diaVenc, dQuit, n){
+  const i = taxaPct/100;
+  // primeiro vencimento >= data de quitação (regra observada na calculadora do MPSC)
+  let ano = dQuit.getUTCFullYear(), mes = dQuit.getUTCMonth();
+  let v0 = vencimento(ano, mes, diaVenc);
+  if (v0 < dQuit){ mes++; if(mes>11){mes=0;ano++;} v0 = vencimento(ano, mes, diaVenc); }
+  const linhas = []; let total = 0, acum = 0;
+  for(let k=0;k<n;k++){
+    let a = v0.getUTCFullYear(), m = v0.getUTCMonth()+k;
+    a += Math.floor(m/12); m = ((m%12)+12)%12;
+    const venc = vencimento(a, m, diaVenc);
+    const dias = Math.round((venc - dQuit)/86400000);
+    const vp = P / Math.pow(1+i, dias/30);
+    total += vp;                       // soma sem arredondar (regra do MPSC)
+    const vp2 = Math.round(vp*100)/100;
+    acum = Math.round((acum+vp2)*100)/100;
+    linhas.push({venc, vp:vp2, acum});
+  }
+  return { linhas, total: Math.round(total*100)/100 };
+}
+
+/* ===== UI ===== */
+const $ = id => document.getElementById(id);
+$('fQuit').value = new Date().toISOString().slice(0,10);
+let ultimoResumo = '';
+
+$('btCalc').addEventListener('click', () => {
+  const erros = [];
+  const P = parseNum($('fValor').value);
+  const taxa = parseNum($('fTaxa').value);
+  const n = parseInt($('fParcelas').value,10);
+  const diaVenc = parseInt($('fDiaVenc').value,10);
+  const dQuit = dataUTC($('fQuit').value);
+  ['fValor','fTaxa','fParcelas','fDiaVenc','fQuit'].forEach(id=>$(id).classList.remove('erro'));
+  if(!(P>0)) erros.push('fValor');
+  if(!(taxa>0)) erros.push('fTaxa');
+  if(!(n>=1 && n<=600)) erros.push('fParcelas');
+  if(!(diaVenc>=1 && diaVenc<=31)) erros.push('fDiaVenc');
+  if(!dQuit) erros.push('fQuit');
+  const msg = $('msgErro');
+  if(erros.length){
+    erros.forEach(id=>$(id).classList.add('erro'));
+    msg.textContent = 'Preencha os campos marcados.'; msg.style.display='inline';
+    $('resultado').style.display='none';
+    return;
+  }
+  msg.style.display='none';
+
+  const dAssin = dataUTC($('fAssin').value);
+  $('avisoAssin').style.display = (dAssin && dAssin < Date.UTC(2014,4,5)) ? 'block' : 'none';
+
+  const r = calcular(P, taxa, diaVenc, dQuit, n);
+  const nominal = Math.round(P*n*100)/100;
+  const economia = Math.round((nominal - r.total)*100)/100;
+  const pct = nominal>0 ? (economia/nominal*100) : 0;
+
+  $('rEconomia').textContent = brl.format(economia);
+  $('rEconomiaPct').textContent = pct.toFixed(1).replace('.',',')+'% de desconto sobre o total das parcelas';
+  $('rQuitacao').textContent = brl.format(r.total);
+  $('rNominal').textContent = brl.format(nominal);
+  $('rNParc').textContent = n + (n===1?' parcela':' parcelas');
+  $('segQuit').style.flex = String(Math.max(r.total,0.01));
+  $('segEcon').style.flex = String(Math.max(economia,0.01));
+  $('lgQuit').textContent = brl.format(r.total);
+  $('lgEcon').textContent = brl.format(economia);
+
+  const tb = $('tbodyParcelas');
+  tb.innerHTML = r.linhas.map((l,ix)=>
+    '<tr><td>'+(ix+1)+'</td><td>'+fmtData(l.venc)+'</td><td class="num">'+brl.format(P)+
+    '</td><td class="num">'+brl.format(l.vp)+'</td><td class="num">'+brl.format(l.acum)+'</td></tr>'
+  ).join('');
+
+  ultimoResumo =
+    '*Simulação de quitação antecipada — '+MARCA.nome+'*\n'+
+    'Parcela: '+brl.format(P)+' × '+n+' restantes\n'+
+    'Total sem desconto: '+brl.format(nominal)+'\n'+
+    'Valor para quitar em '+fmtData(dQuit)+': *'+brl.format(r.total)+'*\n'+
+    'Economia: *'+brl.format(economia)+'* ('+pct.toFixed(1).replace('.',',')+'%)\n'+
+    '_Cálculo informativo pela metodologia do MPSC (CDC, art. 52, §2º)._';
+
+  $('resultado').style.display='block';
+  $('resultado').scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+
+$('btCopiar').addEventListener('click', async (e) => {
+  try{ await navigator.clipboard.writeText(ultimoResumo); }
+  catch(_){
+    const ta=document.createElement('textarea'); ta.value=ultimoResumo;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  const b=e.currentTarget, t=b.textContent; b.textContent='Copiado ✓';
+  setTimeout(()=>{b.textContent=t;},1600);
+});
+</script>
+
+</body>
+</html>
