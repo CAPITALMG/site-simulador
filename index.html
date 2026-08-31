@@ -49,17 +49,16 @@
   .wrap{max-width:960px; margin:0 auto; padding:24px 20px 64px}
 
   /* marca */
-  .brand{display:flex; align-items:center; gap:14px; padding:8px 0 22px}
+  .brand{display:flex; flex-direction:column; align-items:flex-start; gap:6px; padding:8px 0 22px}
   .brand__logo{
-    width:46px;height:46px;border-radius:12px;flex:none;
-    background:var(--accent); color:var(--on-accent);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:19px;letter-spacing:.5px;
-    overflow:hidden;
+    width:min(210px,58vw); height:52px;
+    background:url("logo.svg") no-repeat left center / contain;
   }
-  .brand__logo img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
-  .brand__nome{font-weight:600;font-size:17px;letter-spacing:.2px}
-  .brand__sub{font-size:13px;color:var(--muted)}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .brand__logo{background-image:url("logo-dark.svg")}
+  }
+  :root[data-theme="dark"] .brand__logo{background-image:url("logo-dark.svg")}
+  .brand__sub{font-size:13px;color:var(--muted);letter-spacing:.01em}
 
   h1{
     font-family:'Bricolage Grotesque','IBM Plex Sans',sans-serif;
@@ -147,12 +146,9 @@
 </style>
 
 <div class="wrap">
-  <header class="brand" id="marca">
-    <div class="brand__logo" id="marcaLogo">CG</div>
-    <div>
-      <div class="brand__nome" id="marcaNome">CG Colombo Assessoria</div>
-      <div class="brand__sub">Simulação de crédito consignado</div>
-    </div>
+  <header class="brand">
+    <div class="brand__logo" role="img" aria-label="MG Capital"></div>
+    <div class="brand__sub">Simulação de crédito consignado</div>
   </header>
 
   <h1>Simulador de Quitação Antecipada</h1>
@@ -248,13 +244,9 @@
 
 <script>
 /* ===== MARCA — edite aqui: nome da empresa e logo (data URI ou deixe vazio p/ iniciais) ===== */
-const MARCA = { nome: 'CG Colombo Assessoria', iniciais: 'CG', logoDataURI: '' };
-(function(){
-  document.getElementById('marcaNome').textContent = MARCA.nome;
-  const alvo = document.getElementById('marcaLogo');
-  if (MARCA.logoDataURI){ alvo.innerHTML = '<img alt="Logo '+MARCA.nome+'" src="'+MARCA.logoDataURI+'">'; }
-  else { alvo.textContent = MARCA.iniciais; }
-})();
+/* A logo do cabeçalho vem de logo.svg / logo-dark.svg (CSS, por tema).
+   Este nome é o que sai no resumo copiado para o WhatsApp. */
+const MARCA = { nome: 'CG Colombo Assessoria' };
 
 /* ===== Cálculo — validado contra a calculadora do MPSC (idêntico parcela a parcela) ===== */
 const brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
