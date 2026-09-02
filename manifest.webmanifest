@@ -1,0 +1,16 @@
+{
+  "name": "Simulador de Quitação Antecipada — CG Colombo Assessoria",
+  "short_name": "Simulador CG",
+  "description": "Quanto o cliente economiza quitando o empréstimo consignado hoje.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F4F7F5",
+  "theme_color": "#0E7C56",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
