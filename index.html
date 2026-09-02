@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Calcule quanto o cliente economiza quitando o empréstimo consignado antecipadamente. Cálculo pela metodologia do MPSC — desconto proporcional dos juros (art. 52, §2º do CDC).">
-<meta name="theme-color" content="#0E7C56" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#101513" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Calcule quanto o cliente economiza quitando o empréstimo consignado antecipadamente. Desconto proporcional dos juros, direito garantido pelo art. 52, §2º do Código de Defesa do Consumidor, conforme orienta o Procon-SP.">
+<meta name="theme-color" content="#F7F6F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131214" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="Simulador de Quitação Antecipada — CG Colombo Assessoria">
 <meta property="og:description" content="Quanto o cliente economiza quitando o empréstimo hoje.">
 <meta property="og:type" content="website">
@@ -22,41 +22,47 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
   :root{
-    --bg:#F4F7F5; --surface:#FFFFFF; --surface-2:#F8FAF9; --ink:#1C2B26; --muted:#5A6B63;
-    --line:#DDE5E0; --line-soft:#EAF0EC;
-    --accent:#0E7C56; --accent-press:#0A5C40; --accent-soft:#E3F1EA; --accent-glow:rgba(14,124,86,.14); --on-accent:#FFFFFF;
-    --c-quit:#B45309; --c-econ:#0E7C56;
+    --bg:#F7F6F2; --surface:#FFFFFF; --surface-2:#FAF9F4; --ink:#1D1C1E; --muted:#6B6963;
+    --line:#E6E3DA; --line-soft:#EFEDE6;
+    --accent:#F2B500; --accent-press:#D99F00; --accent-soft:#FFF3C7; --accent-glow:rgba(242,181,0,.25); --on-accent:#1D1C1E;
+    --accent-ink:#8F6400;
+    --hero-a:#2C2B2E; --hero-b:#141316; --hero-ink:#FFFFFF; --hero-valor:#FFD54A;
+    --c-quit:#4A484C; --c-econ:#F2B500;
     --warn-bg:#FDF3E3; --warn-ink:#8A5A10;
     --erro:#C2410C;
-    --wa:#128C7E; --wa-press:#0E6F64; --on-wa:#FFFFFF;
-    --shadow:0 1px 2px rgba(28,43,38,.05),0 6px 24px rgba(28,43,38,.07);
-    --shadow-hero:0 12px 40px -12px rgba(14,124,86,.35);
+    --wa:#25D366; --wa-press:#1EBE5A; --on-wa:#0B2E1A;
+    --shadow:0 1px 2px rgba(29,28,30,.05),0 6px 24px rgba(29,28,30,.07);
+    --shadow-hero:0 14px 40px -14px rgba(29,28,30,.55);
     --logo-light:block; --logo-dark:none;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#0F1412; --surface:#181F1C; --surface-2:#1E2622; --ink:#E8EDEA; --muted:#93A39B;
-      --line:#2A342F; --line-soft:#232C28;
-      --accent:#22A377; --accent-press:#2DB988; --accent-soft:#1B2F26; --accent-glow:rgba(34,163,119,.18); --on-accent:#07140E;
-      --c-quit:#E08A2B; --c-econ:#22A377;
+      --bg:#131214; --surface:#1C1B1E; --surface-2:#232225; --ink:#EDEBE6; --muted:#A29F97;
+      --line:#302F33; --line-soft:#29282C;
+      --accent:#F7C531; --accent-press:#FFD54A; --accent-soft:#3A3010; --accent-glow:rgba(247,197,49,.22); --on-accent:#1D1C1E;
+      --accent-ink:#FFD54A;
+      --hero-a:#2E2D31; --hero-b:#1A191C; --hero-ink:#FFFFFF; --hero-valor:#FFD54A;
+      --c-quit:#77757A; --c-econ:#F7C531;
       --warn-bg:#33290F; --warn-ink:#E0B457;
       --erro:#F0784A;
-      --wa:#25D366; --wa-press:#3BE07A; --on-wa:#07140E;
+      --wa:#25D366; --wa-press:#3BE07A; --on-wa:#0B2E1A;
       --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 24px rgba(0,0,0,.35);
-      --shadow-hero:0 12px 40px -12px rgba(34,163,119,.35);
+      --shadow-hero:0 14px 40px -14px rgba(0,0,0,.7);
       --logo-light:none; --logo-dark:block;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#0F1412; --surface:#181F1C; --surface-2:#1E2622; --ink:#E8EDEA; --muted:#93A39B;
-    --line:#2A342F; --line-soft:#232C28;
-    --accent:#22A377; --accent-press:#2DB988; --accent-soft:#1B2F26; --accent-glow:rgba(34,163,119,.18); --on-accent:#07140E;
-    --c-quit:#E08A2B; --c-econ:#22A377;
+    --bg:#131214; --surface:#1C1B1E; --surface-2:#232225; --ink:#EDEBE6; --muted:#A29F97;
+    --line:#302F33; --line-soft:#29282C;
+    --accent:#F7C531; --accent-press:#FFD54A; --accent-soft:#3A3010; --accent-glow:rgba(247,197,49,.22); --on-accent:#1D1C1E;
+    --accent-ink:#FFD54A;
+    --hero-a:#2E2D31; --hero-b:#1A191C; --hero-ink:#FFFFFF; --hero-valor:#FFD54A;
+    --c-quit:#77757A; --c-econ:#F7C531;
     --warn-bg:#33290F; --warn-ink:#E0B457;
     --erro:#F0784A;
-    --wa:#25D366; --wa-press:#3BE07A; --on-wa:#07140E;
+    --wa:#25D366; --wa-press:#3BE07A; --on-wa:#0B2E1A;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 24px rgba(0,0,0,.35);
-    --shadow-hero:0 12px 40px -12px rgba(34,163,119,.35);
+    --shadow-hero:0 14px 40px -14px rgba(0,0,0,.7);
     --logo-light:none; --logo-dark:block;
   }
 
@@ -85,7 +91,7 @@
     display:flex; align-items:center; justify-content:center; cursor:pointer;
     transition:color .15s, border-color .15s, background .15s;
   }
-  .bt-tema:hover{color:var(--accent); border-color:var(--accent)}
+  .bt-tema:hover{color:var(--accent-ink); border-color:var(--accent)}
   .bt-tema:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
   .bt-tema svg{width:20px; height:20px; display:block}
   .bt-tema .sol{display:none}
@@ -95,7 +101,7 @@
 
   .eyebrow{
     display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600;
-    letter-spacing:.08em; text-transform:uppercase; color:var(--accent);
+    letter-spacing:.08em; text-transform:uppercase; color:var(--accent-ink);
     background:var(--accent-soft); padding:5px 11px; border-radius:999px; margin-bottom:12px;
   }
   .eyebrow::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--accent)}
@@ -161,7 +167,7 @@
   button svg{width:18px;height:18px;flex:none}
   .bt-primario{background:var(--accent);color:var(--on-accent);font-size:16.5px;padding:13px 24px;flex:1 1 auto;justify-content:center}
   .bt-primario:hover{background:var(--accent-press)}
-  .bt-leve{background:var(--accent-soft);color:var(--accent);padding:10px 15px;font-size:14.5px}
+  .bt-leve{background:var(--accent-soft);color:var(--accent-ink);padding:10px 15px;font-size:14.5px}
   .bt-leve:hover{filter:brightness(.95)}
   .bt-fantasma{background:transparent;color:var(--muted);padding:10px 12px;font-size:14.5px;border:1px solid var(--line)}
   .bt-fantasma:hover{color:var(--ink);border-color:var(--muted)}
@@ -174,7 +180,7 @@
   .hist{margin-top:20px; display:none}
   .hist .sub-h{display:flex; justify-content:space-between; align-items:center}
   .hist .sub-h a{font-weight:500; text-transform:none; letter-spacing:0; color:var(--muted); cursor:pointer; font-size:12.5px}
-  .hist .sub-h a:hover{color:var(--accent)}
+  .hist .sub-h a:hover{color:var(--accent-ink)}
   .chips{display:flex; flex-direction:column; gap:6px}
   .chip{
     display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; text-align:left;
@@ -183,14 +189,14 @@
   }
   .chip:hover{border-color:var(--accent)}
   .chip .q{color:var(--muted); font-weight:400; white-space:nowrap}
-  .chip .e{color:var(--accent); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .chip .e{color:var(--accent-ink); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap}
 
   /* ===== resultado ===== */
   .res-card{position:relative; overflow:hidden}
   .vazio{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
     padding:46px 20px; color:var(--muted); min-height:380px}
   .vazio .ico{width:64px;height:64px;border-radius:18px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-  .vazio .ico svg{width:30px;height:30px;color:var(--accent)}
+  .vazio .ico svg{width:30px;height:30px;color:var(--accent-ink)}
   .vazio h3{margin:0 0 6px; font-family:'Bricolage Grotesque',sans-serif; font-size:20px; color:var(--ink)}
   .vazio p{margin:0; max-width:40ch; font-size:15px}
   .vazio ul{list-style:none; padding:0; margin:22px 0 0; display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
@@ -203,20 +209,19 @@
   .quem b{color:var(--ink); font-weight:600}
 
   .hero{
-    background:linear-gradient(135deg, var(--accent) 0%, var(--accent-press) 100%);
-    color:#fff; border-radius:14px; padding:22px 24px 20px; box-shadow:var(--shadow-hero);
+    background:linear-gradient(135deg, var(--hero-a) 0%, var(--hero-b) 100%);
+    color:var(--hero-ink); border-radius:14px; padding:22px 24px 20px; box-shadow:var(--shadow-hero);
     position:relative; overflow:hidden;
   }
-  :root[data-theme="dark"] .hero{color:#07140E}
-  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{color:#07140E} }
-  .hero::after{content:""; position:absolute; right:-40px; top:-60px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,.10)}
+  .hero::after{content:""; position:absolute; right:-40px; top:-60px; width:220px; height:220px; border-radius:50%; background:rgba(242,181,0,.12)}
   .hero .rotulo{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;opacity:.85}
   .hero .valor{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.02em;
-    font-size:clamp(38px,6vw,58px);line-height:1.02;
+    font-size:clamp(38px,6vw,58px);line-height:1.02;color:var(--hero-valor);
     font-variant-numeric:tabular-nums;margin:6px 0 4px;
   }
-  .hero .sub{opacity:.9;font-size:15px}
+  .hero .sub{opacity:.85;font-size:15px}
+  .hero .sub b{color:var(--hero-valor)}
   .hero .sub b{font-weight:700}
 
   .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 18px}
@@ -227,12 +232,12 @@
   .tile .d{font-size:12.5px;color:var(--muted);margin-top:2px}
 
   .barra{display:flex;height:30px;border-radius:9px;overflow:hidden;gap:3px}
-  .barra>div{min-width:12px; transition:flex .5s ease}
+  .barra>div{min-width:12px; transition:flex .9s cubic-bezier(.22,.61,.36,1)}
   .seg-quit{background:var(--c-quit)}
   .seg-econ{background:var(--c-econ)}
   .legenda{display:flex;gap:22px;margin-top:10px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
   .legenda .chipc{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;vertical-align:-1px}
-  .legenda b{font-variant-numeric:tabular-nums;color:var(--ink)}
+  .legenda b{font-variant-numeric:tabular-nums;color:var(--ink);transition:none}
 
   .bloco{margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px}
   .bloco h3{margin:0 0 4px;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:700}
@@ -245,20 +250,20 @@
   td.num,th.num{text-align:right}
   td.nw{white-space:nowrap}
   tr.hoje td{font-weight:600}
-  .tag-hoje{font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:2px 7px; margin-left:8px; vertical-align:1px}
+  .tag-hoje{font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink); background:var(--accent-soft); border-radius:999px; padding:2px 7px; margin-left:8px; vertical-align:1px}
   .depois{color:var(--muted);font-weight:400}
-  td.mais{color:var(--c-quit);font-weight:600}
+  td.mais{color:var(--ink);font-weight:600}
   tfoot td{font-weight:600;border-top:2px solid var(--line);border-bottom:none}
-  .lucro{color:var(--accent)}
+  .lucro{color:var(--accent-ink)}
 
-  details summary{cursor:pointer;font-weight:600;font-size:15px;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px}
+  details summary{cursor:pointer;font-weight:600;font-size:15px;color:var(--accent-ink);list-style:none;display:flex;align-items:center;gap:8px}
   details summary::-webkit-details-marker{display:none}
   details summary::before{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin-left:2px}
   details[open] summary::before{transform:rotate(45deg)}
   details .tabela-scroll{margin-top:12px}
 
   .rodape{color:var(--muted);font-size:13px;max-width:78ch;margin-top:28px}
-  .rodape a{color:var(--accent)}
+  .rodape a{color:var(--accent-ink)}
 
   .toast{
     position:fixed; left:50%; bottom:24px; transform:translate(-50%, 20px); opacity:0;
@@ -279,7 +284,7 @@
     @page{size:A4; margin:14mm 14mm 16mm}
     :root, :root[data-theme="dark"], :root:not([data-theme="light"]){
       --bg:#fff;--surface:#fff;--surface-2:#fff;--ink:#111;--muted:#555;--line:#bbb;--line-soft:#ddd;
-      --accent:#0E7C56;--accent-press:#0A5C40;--accent-soft:#eef5f1;--c-quit:#B45309;--c-econ:#0E7C56;
+      --accent:#F2B500;--accent-press:#D99F00;--accent-soft:#fff3c7;--accent-ink:#7A5500;--c-quit:#4A484C;--c-econ:#F2B500;--hero-valor:#FFD54A;
       --logo-light:block;--logo-dark:none;
     }
     body{background:#fff!important; background-image:none!important; font-size:12.5px; color:#111}
@@ -292,7 +297,7 @@
     .so-print{display:block}
     .print-dados{display:grid; grid-template-columns:repeat(3,1fr); gap:6px 18px; font-size:12px; border:1px solid #bbb; border-radius:8px; padding:10px 12px; margin:0 0 14px}
     .print-dados b{display:block; color:#555; font-weight:600; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em}
-    .hero{background:#0E7C56!important; color:#fff!important; box-shadow:none; -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:14px 18px}
+    .hero{background:#1D1C1E!important; color:#fff!important; box-shadow:none; -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:14px 18px}
     .hero .valor{font-size:34px}
     .tiles{margin:10px 0 12px}
     .tile{background:#fff}
@@ -332,8 +337,8 @@
   <div class="eyebrow">Crédito consignado</div>
   <h1>Simulador de Quitação Antecipada</h1>
   <p class="lede">Mostre ao cliente, em segundos, <b>quanto ele deixa de pagar</b> quitando o empréstimo
-  hoje. Mesma metodologia da calculadora pública do MPSC: desconto proporcional dos juros, direito
-  garantido pelo art.&nbsp;52, §&nbsp;2º do Código de Defesa do Consumidor.</p>
+  hoje. Desconto proporcional dos juros: direito garantido pelo art.&nbsp;52, §&nbsp;2º do Código de
+  Defesa do Consumidor, como orienta o Procon-SP.</p>
 
   <div class="layout">
     <!-- ===== FORMULÁRIO ===== -->
@@ -498,9 +503,13 @@
   </div>
 
   <p class="rodape">Resultado informativo — confirme o valor exato com o boleto de quitação da
-  instituição. Metodologia: valor presente de cada parcela pela taxa contratual
-  (art.&nbsp;52, §&nbsp;2º do CDC; art.&nbsp;7º da Resolução CMN n.&nbsp;5.004/2022), conforme a
-  <a href="https://intranet.mpsc.mp.br/scq/calculadora" target="_blank" rel="noopener">calculadora pública do Ministério Público de Santa Catarina</a>.</p>
+  instituição. Metodologia: valor presente de cada parcela pela taxa do contrato, com redução
+  proporcional dos juros (art.&nbsp;52, §&nbsp;2º do Código de Defesa do Consumidor; art.&nbsp;7º da
+  Resolução CMN n.&nbsp;5.004/2022). O Procon-SP orienta: <em>"é assegurado ao consumidor a liquidação
+  antecipada do débito, total ou parcialmente, mediante redução proporcional dos juros e demais
+  acréscimos"</em> — veja as
+  <a href="https://www.procon.sp.gov.br/perguntas-frequentes/" target="_blank" rel="noopener">perguntas frequentes do Procon-SP</a>
+  (Assuntos financeiros). O consumidor também pode exigir da instituição a planilha de evolução da dívida (CDC, art.&nbsp;6º, III).</p>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
@@ -532,7 +541,7 @@ const MARCA = { nome: 'CG Colombo Assessoria' };
   pinta();
 })();
 
-/* ===== Cálculo — validado contra a calculadora do MPSC (idêntico parcela a parcela). NÃO ALTERAR sem revalidar. ===== */
+/* ===== Cálculo — valor presente com redução proporcional dos juros. Validado parcela a parcela contra a calculadora pública do MPSC em 31/08/2026 (casos no README). NÃO ALTERAR sem revalidar. ===== */
 const brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
 const num2 = new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2});
 const fmtData = d => String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
@@ -566,7 +575,7 @@ function somaMeses(d, k){
 }
 function calcular(P, taxaPct, diaVenc, dQuit, n){
   const i = taxaPct/100;
-  // primeiro vencimento >= data de quitação (regra observada na calculadora do MPSC)
+  // primeiro vencimento >= data de quitação (mesmo dia entra com valor cheio)
   let ano = dQuit.getUTCFullYear(), mes = dQuit.getUTCMonth();
   let v0 = vencimento(ano, mes, diaVenc);
   if (v0 < dQuit){ mes++; if(mes>11){mes=0;ano++;} v0 = vencimento(ano, mes, diaVenc); }
@@ -577,7 +586,7 @@ function calcular(P, taxaPct, diaVenc, dQuit, n){
     const venc = vencimento(a, m, diaVenc);
     const dias = Math.round((venc - dQuit)/86400000);
     const vp = P / Math.pow(1+i, dias/30);
-    total += vp;                       // soma sem arredondar (regra do MPSC)
+    total += vp;                       // soma sem arredondar; arredonda só o total
     const vp2 = Math.round(vp*100)/100;
     acum = Math.round((acum+vp2)*100)/100;
     linhas.push({venc, vp:vp2, acum});
@@ -612,15 +621,19 @@ async function copiar(txt, aviso){
   }
   toast(aviso);
 }
+/* Tween suave: parte do valor que está na tela e chega no novo (1,1 s, ease-in-out). */
 function animaValor(el, alvo){
   const reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  cancelAnimationFrame(animaValor._raf);
-  if (reduz || !(alvo > 0)) { el.textContent = brl.format(alvo); return; }
-  const t0 = performance.now(), dur = 650;
+  if (el._raf) cancelAnimationFrame(el._raf);
+  const de = (typeof el._val === 'number') ? el._val : 0;
+  if (reduz || de === alvo) { el._val = alvo; el.textContent = brl.format(alvo); return; }
+  const t0 = performance.now(), dur = 1100;
   (function passo(t){
-    const p = Math.min(1, (t - t0)/dur), e = 1 - Math.pow(1-p, 3);
-    el.textContent = brl.format(alvo*e);
-    if (p < 1) animaValor._raf = requestAnimationFrame(passo); else el.textContent = brl.format(alvo);
+    const p = Math.min(1, (t - t0)/dur);
+    const e = p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p+2, 3)/2;   // easeInOutCubic
+    const v = de + (alvo - de)*e;
+    el._val = v; el.textContent = brl.format(v);
+    if (p < 1) el._raf = requestAnimationFrame(passo); else { el._val = alvo; el.textContent = brl.format(alvo); }
   })(t0);
 }
 function esc(s){ return String(s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
@@ -688,15 +701,15 @@ function simular(rolar){
 
   animaValor($('rEconomia'), economia);
   $('rEconomiaPct').innerHTML = '<b>'+pctTxt+'</b> de desconto sobre o total das parcelas que faltam';
-  $('rQuitacao').textContent = brl.format(r.total);
+  animaValor($('rQuitacao'), r.total);
   $('rQuitData').textContent = 'quitando em '+fmtData(c.dQuit);
-  $('rNominal').textContent = brl.format(nominal);
+  animaValor($('rNominal'), nominal);
   $('rNParc').textContent = c.n + (c.n===1?' parcela':' parcelas')+' × '+brl.format(c.P);
-  $('rJurosMedio').textContent = brl.format(jurosMedio);
+  animaValor($('rJurosMedio'), jurosMedio);
   $('segQuit').style.flex = String(Math.max(r.total,0.01));
   $('segEcon').style.flex = String(Math.max(economia,0.01));
-  $('lgQuit').textContent = brl.format(r.total);
-  $('lgEcon').textContent = brl.format(economia);
+  animaValor($('lgQuit'), r.total);
+  animaValor($('lgEcon'), economia);
 
   // parcela a parcela
   $('tbodyParcelas').innerHTML = r.linhas.map((l,ix)=>
@@ -731,7 +744,7 @@ function simular(rolar){
   ];
   const esp1 = linhasEsp.find(e=>e.k===1);
   if (esp1 && esp1.desembolso > r.total) linhasWa.push('Se esperar 1 mês, o desembolso total sobe para '+brl.format(esp1.desembolso)+' (+ '+brl.format(Math.round((esp1.desembolso-r.total)*100)/100)+').');
-  linhasWa.push('_Cálculo informativo pela metodologia do MPSC (CDC, art. 52, §2º). Confirme o valor no boleto de quitação da instituição._');
+  linhasWa.push('_Cálculo informativo com base no CDC (art. 52, §2º) e na orientação do Procon-SP. Confirme o valor no boleto de quitação da instituição._');
   if (c.consultora) linhasWa.push(c.consultora+' · '+MARCA.nome);
 
   // dados p/ impressão
@@ -741,13 +754,13 @@ function simular(rolar){
   ].map(([k,v])=>'<div><b>'+k+'</b>'+v+'</div>').join('');
   $('printRodape').textContent = MARCA.nome+' · Simulação informativa gerada em '+agora.toLocaleString('pt-BR')+
     (c.consultora ? ' por '+c.consultora : '')+'. Confirme o valor exato com o boleto de quitação da instituição. '+
-    'Metodologia: valor presente de cada parcela pela taxa contratual (CDC art. 52 §2º; Res. CMN 5.004/2022), conforme a calculadora pública do MPSC.';
+    'Metodologia: valor presente de cada parcela pela taxa contratual, com redução proporcional dos juros (CDC art. 52 §2º; Res. CMN 5.004/2022), conforme orienta o Procon-SP.';
 
   ultimo = { c, r, nominal, economia, pct, resumo: linhasWa.filter(Boolean).join('\n') };
   calculado = true;
   $('vazio').style.display = 'none';
   const res = $('resultado');
-  res.classList.remove('on'); void res.offsetWidth; res.classList.add('on');
+  if (!res.classList.contains('on')) res.classList.add('on');   // anima só na 1ª vez; recálculo troca os números no lugar
   if (rolar && window.innerWidth < 980) res.scrollIntoView({behavior:'smooth', block:'start'});
 
   salvarHistorico(ultimo);
@@ -762,6 +775,7 @@ $('btLimpar').addEventListener('click', () => {
   $('msgErro').style.display='none'; $('avisoAssin').style.display='none';
   calculado = false; ultimo = null;
   $('resultado').classList.remove('on'); $('vazio').style.display='';
+  ['rEconomia','rQuitacao','rNominal','rJurosMedio','lgQuit','lgEcon'].forEach(id => { $(id)._val = undefined; });
   try{ history.replaceState(null, '', location.pathname); }catch(_){}
   $('fValor').focus();
 });
