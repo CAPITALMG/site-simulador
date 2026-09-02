@@ -161,8 +161,13 @@
   .bt-leve:hover{background:var(--accent-soft)}
   .bt-fantasma{background:transparent;color:var(--accent-ink);padding:10px 14px;font-size:15px;border:none}
   .bt-fantasma:hover{text-decoration:underline}
-  .bt-wa{background:var(--wa);color:var(--on-wa);font-size:15px;font-weight:600}
-  .bt-wa:hover{background:var(--wa-press)}
+  /* rótulos dos botões vêm de data-label: extensões de navegador que grifam palavras não alcançam */
+  .lbl::after{content:attr(data-label)}
+  .acoes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:22px}
+  @media(min-width:1100px){.acoes{grid-template-columns:repeat(4,1fr)}}
+  @media(max-width:480px){.acoes{grid-template-columns:1fr}}
+  .acoes .bt-leve{justify-content:center;padding:12px 12px;font-size:15px;font-weight:500;white-space:nowrap}
+  .ico-wa{color:#25D366}
   .msg-erro{color:var(--erro);font-size:14px;font-weight:500;display:none;flex-basis:100%}
   .aviso{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:10px 14px;font-size:14px;margin-top:16px;display:none}
 
@@ -278,7 +283,7 @@
     body{background:#fff!important; background-image:none!important; font-size:12.5px; color:#111}
     .wrap{max-width:none; padding:0}
     .topo{padding:0 0 10px; border-bottom:1px solid #bbb; margin-bottom:12px}
-    .bt-tema, .acao, .hist, .vazio, .lede, .eyebrow, .rodape a, #formCard, .toast{display:none!important}
+    .bt-tema, .acao, .acoes, .hist, .vazio, .lede, .eyebrow, .rodape a, #formCard, .toast{display:none!important}
     h1{font-size:22px; margin:0 0 4px}
     .layout{display:block}
     .card{box-shadow:none; border:none; padding:0}
@@ -382,11 +387,11 @@
       </div>
 
       <div class="acao">
-        <button class="bt-primario" id="btCalc" type="button">
+        <button class="bt-primario" id="btCalc" type="button" aria-label="Calcular economia">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M8 7h8M8 12h3M13 12h3M8 16.5h3M13 16.5h3"/></svg>
-          Calcular economia
+          <span class="lbl" data-label="Calcular economia" aria-hidden="true"></span>
         </button>
-        <button class="bt-fantasma" id="btLimpar" type="button" title="Limpar os campos">Limpar</button>
+        <button class="bt-fantasma" id="btLimpar" type="button" title="Limpar os campos" aria-label="Limpar os campos"><span class="lbl" data-label="Limpar" aria-hidden="true"></span></button>
         <span class="msg-erro" id="msgErro" role="alert"></span>
       </div>
       <div class="aviso" id="avisoAssin">⚠ Contrato assinado antes de 05/05/2014 — a metodologia
@@ -442,22 +447,22 @@
           <span><span class="chipc seg-econ"></span>Deixa de pagar <b id="lgEcon">—</b></span>
         </div>
 
-        <div class="acao">
-          <button class="bt-wa" id="btWhats" type="button">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24.01 4.54-3.69 8.24-8.23 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
-            Enviar no WhatsApp
+        <div class="acoes">
+          <button class="bt-leve" id="btWhats" type="button" aria-label="Enviar no WhatsApp">
+            <svg class="ico-wa" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24.01 4.54-3.69 8.24-8.23 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
+            <span class="lbl" data-label="Enviar no WhatsApp" aria-hidden="true"></span>
           </button>
-          <button class="bt-leve" id="btCopiar" type="button">
+          <button class="bt-leve" id="btCopiar" type="button" aria-label="Copiar resumo">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-            Copiar resumo
+            <span class="lbl" data-label="Copiar resumo" aria-hidden="true"></span>
           </button>
-          <button class="bt-leve" id="btLink" type="button" title="Link que abre esta simulação já preenchida">
+          <button class="bt-leve" id="btLink" type="button" aria-label="Copiar link da simulação" title="Link que abre esta simulação já preenchida">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1.1l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.1-.1l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>
-            Copiar link
+            <span class="lbl" data-label="Copiar link" aria-hidden="true"></span>
           </button>
-          <button class="bt-leve" id="btPrint" type="button">
+          <button class="bt-leve" id="btPrint" type="button" aria-label="Imprimir ou salvar em PDF">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 15h12v6H6z"/></svg>
-            Imprimir / PDF
+            <span class="lbl" data-label="Imprimir / PDF" aria-hidden="true"></span>
           </button>
         </div>
 
