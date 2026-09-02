@@ -274,35 +274,51 @@
 
   /* ===== impressão (A4) ===== */
   @media print{
-    @page{size:A4; margin:14mm 14mm 16mm}
+    @page{size:A4; margin:12mm 12mm 14mm}
     :root, :root[data-theme="dark"], :root:not([data-theme="light"]){
       --bg:#fff;--surface:#fff;--surface-2:#fff;--ink:#111;--muted:#555;--line:#bbb;--line-soft:#ddd;
-      --accent:#0071E3;--accent-press:#0077ED;--accent-soft:#eaf2fd;--accent-ink:#0066CC;--c-quit:#86868B;--c-econ:#34C759;--mais:#FF9500;--hero-valor:#1D1D1F;--hero-a:#F5F5F7;
+      --accent:#0071E3;--accent-press:#0077ED;--accent-soft:#eaf2fd;--accent-ink:#0066CC;--c-quit:#86868B;--c-econ:#1E8E3E;--mais:#B45309;--hero-valor:#111;--hero-a:#F5F5F7;
       --logo-light:block;--logo-dark:none;
     }
-    body{background:#fff!important; background-image:none!important; font-size:12.5px; color:#111}
+    /* só a página imprime: esconde qualquer coisa que extensão do navegador tenha pendurado no body (ícones fixos repetem em toda folha) */
+    body > :not(.wrap){display:none!important}
+    body{background:#fff!important; font-size:12px; color:#111}
     .wrap{max-width:none; padding:0}
-    .topo{padding:0 0 10px; border-bottom:1px solid #bbb; margin-bottom:12px}
-    .bt-tema, .acao, .acoes, .hist, .vazio, .lede, .eyebrow, .rodape a, #formCard, .toast{display:none!important}
-    h1{font-size:22px; margin:0 0 4px}
+    .topo, .eyebrow, h1, .lede, .quem, .res-card > h2, #resultado > h2, .bt-tema, .acao, .acoes, .hist, .vazio, .rodape, .toast, #formCard{display:none!important}
     .layout{display:block}
-    .card{box-shadow:none; border:none; padding:0}
+    .card{box-shadow:none; border:none; padding:0; border-radius:0}
     .so-print{display:block}
-    .print-dados{display:grid; grid-template-columns:repeat(3,1fr); gap:6px 18px; font-size:12px; border:1px solid #bbb; border-radius:8px; padding:10px 12px; margin:0 0 14px}
-    .print-dados b{display:block; color:#555; font-weight:600; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em}
-    .hero{background:#F5F5F7!important; color:#1D1D1F!important; border:1px solid #ccc; box-shadow:none; -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:14px 18px}
+    .print-cab{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; border-bottom:2px solid #111; padding-bottom:10px; margin:0 0 12px}
+    .pc-esq{display:flex; align-items:center; gap:12px}
+    .pc-logo{height:34px; width:auto; display:block}
+    .pc-marca{font-weight:700; font-size:14px; line-height:1.25}
+    .pc-marca span{display:block; font-weight:400; color:#555; font-size:11px}
+    .pc-dir{text-align:right; font-size:11.5px; color:#333; line-height:1.45}
+    .pc-tit{font-weight:700; font-size:14px; color:#111; margin-bottom:2px}
+    .print-dados{display:grid; grid-template-columns:repeat(3,1fr); gap:6px 18px; font-size:11.5px; border:1px solid #bbb; border-radius:8px; padding:9px 12px; margin:0 0 12px}
+    .print-dados b{display:block; color:#555; font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:.06em}
+    .hero{background:#F5F5F7!important; color:#111!important; -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:14px 18px; border-radius:10px; break-inside:avoid}
+    .hero .rotulo{color:#555}
     .hero .valor{font-size:34px}
-    .tiles{margin:10px 0 12px}
-    .tile{background:#fff}
+    .hero .sub{color:#555}
+    .tiles{margin:10px 0 10px; break-inside:avoid}
+    .tile{background:#fff; border:1px solid #ccc; padding:10px 12px}
+    .tile .v{font-size:18px}
     .barra, .seg-quit, .seg-econ, .legenda .chipc{-webkit-print-color-adjust:exact; print-color-adjust:exact}
-    .barra{height:18px}
+    .barra{height:12px}
+    .legenda{font-size:11.5px}
     #resultado{display:block!important; animation:none}
+    .bloco{margin-top:14px; padding-top:10px}
+    .bloco h3{font-size:14px}
+    .bloco .expl{font-size:11px; margin-bottom:6px}
     details summary{display:none}
     details:not([open]) .tabela-scroll{display:block}
-    .bloco{break-inside:avoid}
-    table{font-size:11.5px}
-    td,th{padding:4px 8px 4px 0}
-    .print-rodape{margin-top:14px; font-size:10.5px; color:#555; border-top:1px solid #bbb; padding-top:8px}
+    details::before{content:"Parcela a parcela"; display:block; font-weight:700; font-size:14px; margin-bottom:6px}
+    table{font-size:10.5px}
+    thead{display:table-header-group}
+    tr{break-inside:avoid}
+    td,th{padding:3px 8px 3px 0}
+    .print-rodape{margin-top:12px; font-size:10px; color:#555; border-top:1px solid #bbb; padding-top:6px}
   }
 </style>
 </head>
@@ -422,6 +438,7 @@
       <div id="resultado">
         <h2>Resultado da simulação</h2>
 
+        <div class="so-print print-cab" id="printCab"></div>
         <div class="so-print print-dados" id="printDados"></div>
 
         <div class="quem" id="quem"></div>
@@ -740,7 +757,14 @@ function simular(rolar){
   linhasWa.push('_Cálculo informativo com base no CDC (art. 52, §2º) e na orientação do Procon-SP. Confirme o valor no boleto de quitação da instituição._');
   if (c.consultora) linhasWa.push(c.consultora+' · '+MARCA.nome);
 
-  // dados p/ impressão
+  // cabeçalho e dados p/ impressão
+  $('printCab').innerHTML =
+    '<div class="pc-esq"><img src="logo.svg" alt="" class="pc-logo">'+
+      '<div class="pc-marca">'+MARCA.nome+'<span>Crédito consignado · simulação de quitação antecipada</span></div></div>'+
+    '<div class="pc-dir"><div class="pc-tit">Proposta de quitação antecipada</div>'+
+      '<div>'+(c.cliente ? 'Cliente: <b>'+esc(c.cliente)+'</b> · ' : '')+'Emitida em <b>'+hojeFmt+'</b></div>'+
+      (c.consultora ? '<div>Consultora: <b>'+esc(c.consultora)+'</b></div>' : '')+
+    '</div>';
   $('printDados').innerHTML = [
     ['Valor da parcela', brl.format(c.P)], ['Taxa ao mês', num2.format(c.taxa)+'%'], ['Parcelas que faltam', String(c.n)],
     ['Dia do vencimento', String(c.diaVenc)], ['Data da quitação', fmtData(c.dQuit)], ['Assinatura', c.dAssin ? fmtData(c.dAssin) : '—'],
